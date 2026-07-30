@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(flutter analyze *)",
+      "PowerShell(& \"C:\\\\src\\\\flutter\\\\bin\\\\flutter.bat\" analyze 2>&1)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(flutter test *)",
+      "PowerShell(flutter devices *)",
+      "PowerShell(flutter emulators *)",
+      "PowerShell(flutter run *)",
+      "PowerShell(flutter *)",
+      "PowerShell(New-Item *)"
+    ]
+  }
+}

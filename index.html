@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rangkaian Series, Paralel, dan Kompleks - Solusi Lengkap</title>
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    <!-- CircuitTikZ via TikZJax -->
+    <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+    <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+    <style>
+        /* ============================================
+           GLOBAL RESET & BASE STYLES
+           Matching the PDF's academic textbook style
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', 'STIX Two Text', 'Latin Modern Roman', 'DejaVu Serif', Georgia, serif;
+            background-color: #FAFAFA;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           TABLE OF CONTENTS
+           ============================================ */
+        .toc {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+
+        .toc h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 14px;
+            border-bottom: 2px solid #C9A96E;
+            padding-bottom: 6px;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 6px 20px;
+        }
+
+        .toc-grid a {
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 3px 0;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .toc-grid a:hover {
+            color: #C9A96E;
+        }
+
+        .toc-grid a .num {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-right: 6px;
+        }
+
+        /* ============================================
+           SECTION HEADERS (Series / Paralel / Kompleks)
+           ============================================ */
+        .section-header {
+            text-align: center;
+            padding: 16px 20px;
+            margin: 10px 20px 15px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================
+           CIRCUIT CARD
+           Matching the PDF's bordered card style:
+           thin border, light background, numbered title
+           ============================================ */
+        .circuit-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            page-break-inside: avoid;
+            transition: box-shadow 0.2s;
+        }
+
+        .circuit-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .circuit-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .circuit-title .num {
+            color: #C9A96E;
+            margin-right: 4px;
+        }
+
+        /* ============================================
+           CIRCUIT DIAGRAM (TikZ container)
+           ============================================ */
+        .circuit-diagram {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            min-height: 80px;
+        }
+
+        .circuit-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ============================================
+           EQUATION BOX
+           Matching PDF style: gray bordered box with
+           bold equation number and formula
+           ============================================ */
+        .equation-box {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin: 14px 0;
+            font-size: 16px;
+            line-height: 2;
+        }
+
+        .eq-number {
+            font-weight: bold;
+            color: #333;
+            margin-right: 8px;
+        }
+
+        .eq-step {
+            display: block;
+            padding: 2px 0 2px 12px;
+            color: #333;
+        }
+
+        .eq-result {
+            display: block;
+            padding: 4px 0 2px 12px;
+            color: #2c3e50;
+        }
+
+        /* ============================================
+           FRACTION DISPLAY (for V = IR form)
+           ============================================ */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 6px;
+        }
+
+        .fraction .num,
+        .fraction .den {
+            padding: 1px 6px;
+            line-height: 1.3;
+        }
+
+        .fraction .bar {
+            width: 100%;
+            height: 1px;
+            background: #333;
+        }
+
+        /* ============================================
+           GRID LAYOUT (2-column matching PDF)
+           ============================================ */
+        .circuits-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .circuit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 800px) {
+            .circuit-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 { font-size: 22px; }
+            .circuit-card { padding: 14px 16px; }
+        }
+
+        /* ============================================
+           PRINT STYLES
+           ============================================ */
+        @media print {
+            body { background: white; }
+            .circuit-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #999;
+            }
+            .header {
+                background: white !important;
+                color: black !important;
+                border-bottom: 2px solid black;
+            }
+            .section-header {
+                background: #333 !important;
+            }
+        }
+
+        /* ============================================
+           PARAMETER TABLE (inside each card)
+           ============================================ */
+        .param-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 10px 0 4px;
+            font-size: 14px;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .param-row span {
+            background: #f0f0f0;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+
+        /* ============================================
+           LEGEND
+           ============================================ */
+        .legend {
+            max-width: 1100px;
+            margin: 0 auto 20px;
+            padding: 12px 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #555;
+            text-align: center;
+        }
+
+        .legend strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================
+     HEADER
+     ============================================ -->
+<div class="header">
+    <h1>Rangkaian Series, Paralel, dan Kompleks</h1>
+    <p>Solusi lengkap 22 soal rangkaian listrik dengan diagram circuitikz, persamaan, dan langkah penyelesaian detail</p>
+</div>
+
+<!-- ============================================
+     LEGEND
+     ============================================ -->
+<div class="legend">
+    <strong>Keterangan:</strong>
+    <strong style="color:#1565C0">Biru</strong> = Arus ($I$) &nbsp;|&nbsp;
+    <strong style="color:#C62828">Merah</strong> = Tegangan ($V$) &nbsp;|&nbsp;
+    <strong style="color:#2E7D32">Hijau</strong> = Hambatan ($R$) &nbsp;|&nbsp;
+    <strong style="color:#F57C00">Oranye</strong> = Kapasitor ($C$) &nbsp;|&nbsp;
+    <strong style="color:#6A1B9A">Ungu</strong> = Induktor ($L$) &nbsp;|&nbsp;
+    Simbol: $V$ = Sumber tegangan, $R$ = Resistor, $C$ = Kapasitor, $L$ = Induktor
+</div>
+
+<!-- ============================================
+     TABLE OF CONTENTS
+     ============================================ -->
+<div class="toc">
+    <h2>Daftar Isi</h2>
+    <div class="toc-grid">
+        <a href="#s1"><span class="num">1.</span> Rangkaian Series - V, R</a>
+        <a href="#s2"><span class="num">2.</span> Rangkaian Series - V, C</a>
+        <a href="#s3"><span class="num">3.</span> Rangkaian Series - V, L</a>
+        <a href="#s4"><span class="num">4.</span> Rangkaian Series - I, R</a>
+        <a href="#s5"><span class="num">5.</span> Rangkaian Series - I, C</a>
+        <a href="#s6"><span class="num">6.</span> Rangkaian Series - I, L</a>
+        <a href="#s7"><span class="num">7.</span> Rangkaian Series - V, R, R</a>
+        <a href="#s8"><span class="num">8.</span> Rangkaian Series - V, R, C</a>
+        <a href="#s9"><span class="num">9.</span> Rangkaian Series - V, R, L</a>
+        <a href="#s10"><span class="num">10.</span> Rangkaian Series - I, R, C</a>
+        <a href="#s11"><span class="num">11.</span> Rangkaian Series - I, R, L</a>
+        <a href="#p1"><span class="num">12.</span> Rangkaian Paralel - V, R</a>
+        <a href="#p2"><span class="num">13.</span> Rangkaian Paralel - V, C</a>
+        <a href="#p3"><span class="num">14.</span> Rangkaian Paralel - V, L</a>
+        <a href="#p4"><span class="num">15.</span> Rangkaian Paralel - I, R</a>
+        <a href="#p5"><span class="num">16.</span> Rangkaian Paralel - I, C</a>
+        <a href="#p6"><span class="num">17.</span> Rangkaian Paralel - I, L</a>
+        <a href="#p7"><span class="num">18.</span> Rangkaian Paralel - V, R, R</a>
+        <a href="#p8"><span class="num">19.</span> Rangkaian Paralel - V, R, C</a>
+        <a href="#p9"><span class="num">20.</span> Rangkaian Paralel - V, R, L</a>
+        <a href="#p10"><span class="num">21.</span> Rangkaian Paralel - I, R, C</a>
+        <a href="#p11"><span class="num">22.</span> Rangkaian Paralel - I, R, L</a>
+        <a href="#k1"><span class="num">K1.</span> Kompleks - RLC Paralel</a>
+        <a href="#k2"><span class="num">K2.</span> Kompleks - 2V, 2R</a>
+    </div>
+</div>
+
+<!-- ============================================
+     CIRCUITS CONTAINER
+     ============================================ -->
+<div class="circuits-container">
+
+<!-- ============================================
+     RANGKAIAN SERIES
+     ============================================ -->
+<div class="section-header" id="series">RANGKAIAN SERIES</div>
+
+<div class="circuit-grid">
+
+<!-- ==================== SOAL 1 ==================== -->
+<div class="circuit-card" id="s1">
+    <div class="circuit-title"><span class="num">1.</span> Rangkaian Series: Sumber Tegangan + Resistor</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$R = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (3,2)
+                      to[short, -o, color=blue] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Hukum Ohm:</span>
+        <span class="eq-result">$$V = I \cdot R \quad \Rightarrow \quad I = \frac{V}{R} = \frac{10V}{2k\Omega} = \boxed{5 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan Resistor:</span>
+        <span class="eq-result">$$V_R = I \cdot R = 5\text{mA} \times 2k\Omega = \boxed{10V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 2 ==================== -->
+<div class="circuit-card" id="s2">
+    <div class="circuit-title"><span class="num">2.</span> Rangkaian Series: Sumber Tegangan + Kapasitor</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[C, l=$C$, v=$V_C$, color=orange] (3,2)
+                      to[short, -o] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Muatan Kapasitor:</span>
+        <span class="eq-result">$$Q = C \cdot V = 10\mu F \times 10V = \boxed{100 \mu C}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan Kapasitor (DC steady-state = open circuit):</span>
+        <span class="eq-result">$$V_C = V_s = \boxed{10V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 3 ==================== -->
+<div class="circuit-card" id="s3">
+    <div class="circuit-title"><span class="num">3.</span> Rangkaian Series: Sumber Tegangan + Induktor</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[L, l=$L$, v=$V_L$, color=violet] (3,2)
+                      to[short, -o] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Hubungan Induktor (DC steady-state = short circuit):</span>
+        <span class="eq-result">$$V_L = L\frac{dI}{dt} \quad \Rightarrow \quad \text{Dalam keadaan mantap: } V_L = \boxed{0V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus melalui rangkaian:</span>
+        <span class="eq-result">$$I = \frac{V_s}{R_{internal}} \quad (\text{tergantung resistansi internal sumber})$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 4 ==================== -->
+<div class="circuit-card" id="s4">
+    <div class="circuit-title"><span class="num">4.</span> Rangkaian Series: Sumber Arus + Resistor</div>
+    <div class="param-row">
+        <span>$I_s = 5\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_s$, color=blue] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (3,2)
+                      to[short, -o] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I=5\text{mA}$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Arus dalam rangkaian series:</span>
+        <span class="eq-result">$$I = I_s = \boxed{5 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan pada Resistor (Hukum Ohm):</span>
+        <span class="eq-result">$$V_R = I \cdot R = 5\text{mA} \times 2k\Omega = \boxed{10V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 5 ==================== -->
+<div class="circuit-card" id="s5">
+    <div class="circuit-title"><span class="num">5.</span> Rangkaian Series: Sumber Arus + Kapasitor</div>
+    <div class="param-row">
+        <span>$I_s = 5\text{ mA}$</span>
+        <span>$C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_s$, color=blue] (0,2)
+                      to[C, l=$C$, v=$V_C$, color=orange] (3,2)
+                      to[short, -o] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I=5\text{mA}$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Hubungan arus-kapasitor:</span>
+        <span class="eq-result">$$I = C\frac{dV_C}{dt} \quad \Rightarrow \quad V_C(t) = \frac{1}{C}\int I\, dt$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan kapasitor pada waktu $t$:</span>
+        <span class="eq-result">$$V_C(t) = \frac{I_s \cdot t}{C} = \frac{5\text{mA} \times t}{10\mu F} = \boxed{500t \text{ V/s} \cdot t}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 6 ==================== -->
+<div class="circuit-card" id="s6">
+    <div class="circuit-title"><span class="num">6.</span> Rangkaian Series: Sumber Arus + Induktor</div>
+    <div class="param-row">
+        <span>$I_s = 5\text{ mA}$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_s$, color=blue] (0,2)
+                      to[L, l=$L$, v=$V_L$, color=violet] (3,2)
+                      to[short, -o] (3,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (3,2) to[short, -o] (3.5,2);
+                \node[above, color=blue, font=\small] at (1.5,2.1) {$I=5\text{mA}$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Hubungan arus-induktor:</span>
+        <span class="eq-result">$$V_L = L\frac{dI}{dt}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Dalam keadaan mantap (DC), arus konstan:</span>
+        <span class="eq-result">$$\frac{dI}{dt} = 0 \quad \Rightarrow \quad V_L = \boxed{0V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 7 ==================== -->
+<div class="circuit-card" id="s7">
+    <div class="circuit-title"><span class="num">7.</span> Rangkaian Series: Sumber Tegangan + 2 Resistor</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$R_1 = 1k\Omega$</span>
+        <span>$R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (2,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (4,2)
+                      to[short, -o] (4,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (4,2) to[short, -o] (4.5,2);
+                \node[above, color=blue, font=\small] at (2,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Hambatan pengganti (series):</span>
+        <span class="eq-result">$$R_{total} = R_1 + R_2 = 1k\Omega + 2k\Omega = \boxed{3k\Omega}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus rangkaian:</span>
+        <span class="eq-result">$$I = \frac{V_s}{R_{total}} = \frac{10V}{3k\Omega} = \boxed{3.33 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Tegangan masing-masing resistor:</span>
+        <span class="eq-result">$$V_{R_1} = I \cdot R_1 = 3.33\text{mA} \times 1k\Omega = \boxed{3.33V}$$</span>
+        <span class="eq-result">$$V_{R_2} = I \cdot R_2 = 3.33\text{mA} \times 2k\Omega = \boxed{6.67V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 8 ==================== -->
+<div class="circuit-card" id="s8">
+    <div class="circuit-title"><span class="num">8.</span> Rangkaian Series: Sumber Tegangan + Resistor + Kapasitor (RC)</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$R = 2k\Omega$</span>
+        <span>$C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (2,2)
+                      to[C, l=$C$, v=$V_C$, color=orange] (4,2)
+                      to[short, -o] (4,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (4,2) to[short, -o] (4.5,2);
+                \node[above, color=blue, font=\small] at (2,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> KVL (Kirchhoff's Voltage Law):</span>
+        <span class="eq-result">$$V_s = V_R + V_C$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> DC steady-state (kapasitor = open circuit):</span>
+        <span class="eq-result">$$V_C = V_s = \boxed{10V}, \quad V_R = \boxed{0V}, \quad I = \boxed{0 \text{ A}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Muatan kapasitor:</span>
+        <span class="eq-result">$$Q = C \cdot V_C = 10\mu F \times 10V = \boxed{100 \mu C}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 9 ==================== -->
+<div class="circuit-card" id="s9">
+    <div class="circuit-title"><span class="num">9.</span> Rangkaian Series: Sumber Tegangan + Resistor + Induktor (RL)</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$R = 2k\Omega$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (2,2)
+                      to[L, l=$L$, v=$V_L$, color=violet] (4,2)
+                      to[short, -o] (4,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (4,2) to[short, -o] (4.5,2);
+                \node[above, color=blue, font=\small] at (2,2.1) {$I$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state (induktor = short circuit):</span>
+        <span class="eq-result">$$V_L = 0V, \quad I = \frac{V_s}{R} = \frac{10V}{2k\Omega} = \boxed{5 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan pada resistor:</span>
+        <span class="eq-result">$$V_R = I \cdot R = 5\text{mA} \times 2k\Omega = \boxed{10V}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Energi tersimpan dalam induktor:</span>
+        <span class="eq-result">$$W_L = \frac{1}{2}LI^2 = \frac{1}{2}(5\text{mH})(5\text{mA})^2 = \boxed{62.5 \text{ nJ}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 10 ==================== -->
+<div class="circuit-card" id="s10">
+    <div class="circuit-title"><span class="num">10.</span> Rangkaian Series: Sumber Arus + Resistor + Kapasitor</div>
+    <div class="param-row">
+        <span>$I_s = 5\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+        <span>$C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_s$, color=blue] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (2,2)
+                      to[C, l=$C$, v=$V_C$, color=orange] (4,2)
+                      to[short, -o] (4,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (4,2) to[short, -o] (4.5,2);
+                \node[above, color=blue, font=\small] at (2,2.1) {$I=5\text{mA}$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Tegangan pada resistor:</span>
+        <span class="eq-result">$$V_R = I_s \cdot R = 5\text{mA} \times 2k\Omega = \boxed{10V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan pada kapasitor:</span>
+        <span class="eq-result">$$V_C(t) = \frac{I_s}{C} \cdot t = \frac{5\text{mA}}{10\mu F} \cdot t = \boxed{500t \text{ V}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Muatan kapasitor pada waktu $t$:</span>
+        <span class="eq-result">$$Q(t) = C \cdot V_C(t) = I_s \cdot t = \boxed{5t \text{ mC}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 11 ==================== -->
+<div class="circuit-card" id="s11">
+    <div class="circuit-title"><span class="num">11.</span> Rangkaian Series: Sumber Arus + Resistor + Induktor</div>
+    <div class="param-row">
+        <span>$I_s = 5\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_s$, color=blue] (0,2)
+                      to[R, l=$R$, v=$V_R$, color=green!70!black] (2,2)
+                      to[L, l=$L$, v=$V_L$, color=violet] (4,2)
+                      to[short, -o] (4,0)
+                      node[ground]{};
+                \draw (0,0) to[short, -o] (-0.5,0);
+                \draw (4,2) to[short, -o] (4.5,2);
+                \node[above, color=blue, font=\small] at (2,2.1) {$I=5\text{mA}$};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Tegangan pada resistor:</span>
+        <span class="eq-result">$$V_R = I_s \cdot R = 5\text{mA} \times 2k\Omega = \boxed{10V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan pada induktor (DC mantap):</span>
+        <span class="eq-result">$$V_L = L\frac{dI}{dt} = 0V \quad \Rightarrow \quad \boxed{V_L = 0V}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Energi dalam induktor:</span>
+        <span class="eq-result">$$W_L = \frac{1}{2}LI_s^2 = \frac{1}{2}(5\text{mH})(5\text{mA})^2 = \boxed{62.5 \text{ nJ}}$$</span>
+    </div>
+</div>
+
+</div><!-- end series grid -->
+
+<!-- ============================================
+     RANGKAIAN PARALEL
+     ============================================ -->
+<div class="section-header" id="paralel">RANGKAIAN PARALEL</div>
+
+<div class="circuit-grid">
+
+<!-- ==================== SOAL 12 ==================== -->
+<div class="circuit-card" id="p1">
+    <div class="circuit-title"><span class="num">12.</span> Rangkaian Paralel: 2 Sumber Tegangan + Resistor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                % Left branch: V1 + R1
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                % Right branch: V2 + R2
+                \draw (4,0) to[V, l=$V_2$, v=$20V$, color=red] (4,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (4,4);
+                % Top & bottom wires
+                \draw (0,4) to[short] (4,4);
+                \draw (0,0) to[short] (4,0) node[ground]{};
+                % Current labels
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (4.1,3) {$I_2$};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_{total}$};
+                % Terminal dots
+                \node[circ] at (0,4) {};
+                \node[circ] at (4,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (4,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Tegangan nodal (KCL):</span>
+        <span class="eq-result">$$V_{node} = \frac{\frac{V_1}{R_1} + \frac{V_2}{R_2}}{\frac{1}{R_1} + \frac{1}{R_2}} = \frac{\frac{10}{1} + \frac{20}{2}}{\frac{1}{1} + \frac{1}{2}} = \frac{20}{1.5} = \boxed{13.33V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus masing-masing cabang:</span>
+        <span class="eq-result">$$I_1 = \frac{V_{node} - V_1}{R_1} = \frac{13.33 - 10}{1k\Omega} = \boxed{3.33 \text{ mA}}$$</span>
+        <span class="eq-result">$$I_2 = \frac{V_{node} - V_2}{R_2} = \frac{13.33 - 20}{2k\Omega} = \boxed{-3.33 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus total:</span>
+        <span class="eq-result">$$I_{total} = I_1 + I_2 = \boxed{0 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 13 ==================== -->
+<div class="circuit-card" id="p2">
+    <div class="circuit-title"><span class="num">13.</span> Rangkaian Paralel: 2 Sumber Tegangan + Kapasitor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (4,0) to[V, l=$V_2$, v=$20V$, color=red] (4,2)
+                      to[C, l=$C$, v=$V_C$, color=orange] (4,4);
+                \draw (0,4) to[short] (4,4);
+                \draw (0,0) to[short] (4,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (4.1,3) {$I_C$};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_{total}$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (4,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (4,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state (kapasitor = open circuit):</span>
+        <span class="eq-result">$$I_C = 0 \text{ A}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus hanya mengalir pada cabang $R_1$:</span>
+        <span class="eq-result">$$I_1 = \frac{V_1 - V_C}{R_1} \quad \text{(KCL: } I_1 = I_C = 0\text{)}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Tegangan kapasitor:</span>
+        <span class="eq-result">$$V_C = V_2 = \boxed{20V}$$</span>
+        <span class="eq-result">$$I_1 = \frac{V_1 - V_C}{R_1} = \frac{10 - 20}{1k\Omega} = \boxed{-10 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 14 ==================== -->
+<div class="circuit-card" id="p3">
+    <div class="circuit-title"><span class="num">14.</span> Rangkaian Paralel: 2 Sumber Tegangan + Induktor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (4,0) to[V, l=$V_2$, v=$20V$, color=red] (4,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (4,4);
+                \draw (0,4) to[L, l=$L$, v=$V_L$, color=violet] (4,4);
+                \draw (0,0) to[short] (4,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (4.1,3) {$I_2$};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_L$};
+                \node[circ] at (0,0) {};
+                \node[circ] at (4,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state (induktor = short circuit):</span>
+        <span class="eq-result">$$V_L = 0V \quad \text{(hubungkan langsung node atas)}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan nodal = 0 (short circuit):</span>
+        <span class="eq-result">$$I_1 = \frac{V_1}{R_1} = \frac{10V}{1k\Omega} = \boxed{10 \text{ mA}}, \quad I_2 = \frac{V_2}{R_2} = \frac{20V}{2k\Omega} = \boxed{10 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus induktor (KCL):</span>
+        <span class="eq-result">$$I_L = I_1 + I_2 = 10\text{mA} + 10\text{mA} = \boxed{20 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 15 ==================== -->
+<div class="circuit-card" id="p4">
+    <div class="circuit-title"><span class="num">15.</span> Rangkaian Paralel: 2 Sumber Arus + Resistor</div>
+    <div class="param-row">
+        <span>$I_1 = 5\text{ mA}$</span>
+        <span>$I_2 = 10\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_1$, color=blue] (0,4);
+                \draw (3,0) to[I, l=$I_2$, color=blue] (3,4);
+                \draw (0,4) to[R, l=$R$, v=$V_R$, color=green!70!black] (3,4);
+                \draw (0,0) to[short] (3,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (1.5,4.1) {$I_{total}$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Arus total (KCL):</span>
+        <span class="eq-result">$$I_{total} = I_1 + I_2 = 5\text{mA} + 10\text{mA} = \boxed{15 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan pada resistor:</span>
+        <span class="eq-result">$$V_R = I_{total} \cdot R = 15\text{mA} \times 2k\Omega = \boxed{30V}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 16 ==================== -->
+<div class="circuit-card" id="p5">
+    <div class="circuit-title"><span class="num">16.</span> Rangkaian Paralel: Sumber Arus + Kapasitor</div>
+    <div class="param-row">
+        <span>$I_1 = 5\text{ mA}$</span>
+        <span>$I_2 = 2.5\text{ mA}$</span>
+        <span>$C = 10\mu F$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_1$, color=blue] (0,4);
+                \draw (3,0) to[I, l=$I_2$, color=blue] (3,4);
+                \draw (0,4) to[C, l=$C$, v=$V_C$, color=orange] (3,4);
+                \draw (0,0) to[short] (3,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (1.5,4.1) {$I_C$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Arus total masuk ke kapasitor (KCL):</span>
+        <span class="eq-result">$$I_C = I_1 + I_2 = 5\text{mA} + 2.5\text{mA} = \boxed{7.5 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan kapasitor terhadap waktu:</span>
+        <span class="eq-result">$$V_C(t) = \frac{1}{C}\int_0^t I_C\, d\tau = \frac{I_C \cdot t}{C} = \frac{7.5\text{mA}}{10\mu F} \cdot t = \boxed{750t \text{ V}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 17 ==================== -->
+<div class="circuit-card" id="p6">
+    <div class="circuit-title"><span class="num">17.</span> Rangkaian Paralel: 2 Sumber Arus + Induktor</div>
+    <div class="param-row">
+        <span>$I_1 = 3\text{ mA}$</span>
+        <span>$I_2 = 6\text{ mA}$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_1$, color=blue] (0,4);
+                \draw (3,0) to[I, l=$I_2$, color=blue] (3,4);
+                \draw (0,4) to[L, l=$L$, v=$V_L$, color=violet] (3,4);
+                \draw (0,0) to[short] (3,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (1.5,4.1) {$I_L$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Arus total masuk ke induktor (KCL):</span>
+        <span class="eq-result">$$I_L = I_1 + I_2 = 3\text{mA} + 6\text{mA} = \boxed{9 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan induktor (DC mantap = 0):</span>
+        <span class="eq-result">$$V_L = L\frac{dI_L}{dt} = 0V \quad (\text{arus konstan})$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Energi tersimpan:</span>
+        <span class="eq-result">$$W_L = \frac{1}{2}LI_L^2 = \frac{1}{2}(5\text{mH})(9\text{mA})^2 = \boxed{202.5 \text{ nJ}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 18 ==================== -->
+<div class="circuit-card" id="p7">
+    <div class="circuit-title"><span class="num">18.</span> Rangkaian Paralel: 2 Sumber Tegangan + 2 Resistor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (4,0) to[V, l=$V_2$, v=$20V$, color=red] (4,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (4,4);
+                \draw (0,4) to[short] (4,4);
+                \draw (0,0) to[short] (4,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (4.1,3) {$I_2$};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_{total}$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (4,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (4,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Tegangan nodal (KCL di node atas):</span>
+        <span class="eq-result">$$\frac{V_n - V_1}{R_1} + \frac{V_n - V_2}{R_2} = 0$$</span>
+        <span class="eq-result">$$V_n = \frac{\frac{V_1}{R_1} + \frac{V_2}{R_2}}{\frac{1}{R_1} + \frac{1}{R_2}} = \frac{10 + 10}{1.5} = \boxed{13.33V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus masing-masing cabang:</span>
+        <span class="eq-result">$$I_1 = \frac{V_n - V_1}{R_1} = \frac{13.33 - 10}{1k\Omega} = \boxed{3.33 \text{ mA}}$$</span>
+        <span class="eq-result">$$I_2 = \frac{V_n - V_2}{R_2} = \frac{13.33 - 20}{2k\Omega} = \boxed{-3.33 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 19 ==================== -->
+<div class="circuit-card" id="p8">
+    <div class="circuit-title"><span class="num">19.</span> Rangkaian Paralel: 2 Sumber Tegangan + Resistor + Kapasitor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (3,0) to[V, l=$V_2$, v=$20V$, color=red] (3,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (3,4);
+                \draw (5,0) to[C, l=$C$, v=$V_C$, color=orange] (5,4);
+                \draw (0,4) to[short] (5,4);
+                \draw (0,0) to[short] (5,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (5.1,3) {$I_C$};
+                \node[above, color=blue, font=\small] at (2.5,4.1) {$I_2$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (5,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+                \node[circ] at (5,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state (kapasitor = open circuit, $I_C = 0$):</span>
+        <span class="eq-result">$$\frac{V_n - V_1}{R_1} + \frac{V_n - V_2}{R_2} = 0$$</span>
+        <span class="eq-result">$$V_n = \frac{10 + 10}{1.5} = \boxed{13.33V} = V_C$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus melalui masing-masing cabang:</span>
+        <span class="eq-result">$$I_1 = \frac{V_n - V_1}{R_1} = \boxed{3.33 \text{ mA}}, \quad I_2 = \frac{V_n - V_2}{R_2} = \boxed{-3.33 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 20 ==================== -->
+<div class="circuit-card" id="p9">
+    <div class="circuit-title"><span class="num">20.</span> Rangkaian Paralel: 2 Sumber Tegangan + Resistor + Induktor</div>
+    <div class="param-row">
+        <span>$V_1 = 10V$, $R_1 = 1k\Omega$</span>
+        <span>$V_2 = 20V$, $R_2 = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$10V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (3,0) to[V, l=$V_2$, v=$20V$, color=red] (3,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (3,4);
+                \draw (5,0) to[L, l=$L$, v=$V_L$, color=violet] (5,4);
+                \draw (0,4) to[short] (5,4);
+                \draw (0,0) to[short] (5,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (5.1,3) {$I_L$};
+                \node[above, color=blue, font=\small] at (2.5,4.1) {$I_2$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (5,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+                \node[circ] at (5,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state (induktor = short circuit, $V_L = 0$):</span>
+        <span class="eq-result">$$V_n = 0V \quad (\text{node atas shorted ke ground melalui } L)$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus dari masing-masing sumber:</span>
+        <span class="eq-result">$$I_1 = \frac{V_1 - V_n}{R_1} = \frac{10V}{1k\Omega} = \boxed{10 \text{ mA}}$$</span>
+        <span class="eq-result">$$I_2 = \frac{V_2 - V_n}{R_2} = \frac{20V}{2k\Omega} = \boxed{10 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus induktor (KCL):</span>
+        <span class="eq-result">$$I_L = I_1 + I_2 = 10\text{mA} + 10\text{mA} = \boxed{20 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 21 ==================== -->
+<div class="circuit-card" id="p10">
+    <div class="circuit-title"><span class="num">21.</span> Rangkaian Paralel: 2 Sumber Arus + Resistor + Kapasitor</div>
+    <div class="param-row">
+        <span>$I_1 = 5\text{ mA}$</span>
+        <span>$I_2 = 3\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_1$, color=blue] (0,4);
+                \draw (3,0) to[I, l=$I_2$, color=blue] (3,4);
+                \draw (5,0) to[R, l=$R$, v=$V_R$, color=green!70!black] (5,4);
+                \draw (0,4) to[C, l=$C$, color=orange] (3,4);
+                \draw (3,4) to[short] (5,4);
+                \draw (0,0) to[short] (5,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (2.5,4.1) {$I_C$};
+                \node[above, color=blue, font=\small] at (5,4.1) {$I_R$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (5,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+                \node[circ] at (5,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> KCL di node atas (arus total masuk):</span>
+        <span class="eq-result">$$I_{total} = I_1 + I_2 = 5\text{mA} + 3\text{mA} = \boxed{8 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus terbagi antara $R$ dan $C$:</span>
+        <span class="eq-result">$$I_R + I_C = I_{total} = 8\text{ mA}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Tegangan pada resistor:</span>
+        <span class="eq-result">$$V_R = I_R \cdot R \quad \text{(tergantung distribusi arus)}$$</span>
+    </div>
+</div>
+
+<!-- ==================== SOAL 22 ==================== -->
+<div class="circuit-card" id="p11">
+    <div class="circuit-title"><span class="num">22.</span> Rangkaian Paralel: 2 Sumber Arus + Resistor + Induktor</div>
+    <div class="param-row">
+        <span>$I_1 = 5\text{ mA}$</span>
+        <span>$I_2 = 3\text{ mA}$</span>
+        <span>$R = 2k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[I, l=$I_1$, color=blue] (0,4);
+                \draw (3,0) to[I, l=$I_2$, color=blue] (3,4);
+                \draw (5,0) to[R, l=$R$, v=$V_R$, color=green!70!black] (5,4);
+                \draw (0,4) to[L, l=$L$, color=violet] (3,4);
+                \draw (3,4) to[short] (5,4);
+                \draw (0,0) to[short] (5,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (2.5,4.1) {$I_L$};
+                \node[above, color=blue, font=\small] at (5,4.1) {$I_R$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (3,4) {};
+                \node[circ] at (5,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (3,0) {};
+                \node[circ] at (5,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> KCL di node atas:</span>
+        <span class="eq-result">$$I_L + I_R = I_1 + I_2 = 5\text{mA} + 3\text{mA} = 8\text{ mA}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> DC steady-state (induktor = short circuit, $V_L = 0$):</span>
+        <span class="eq-result">$$V_{node} = I_R \cdot R \quad \text{(semua arus } I_L \text{ melewati short)}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus induktor (mengambil semua arus karena short):</span>
+        <span class="eq-result">$$I_L = I_1 + I_2 - I_R = 8\text{mA} - I_R$$</span>
+        <span class="eq-result">$$\text{Dengan } I_R = \frac{V_{node}}{R} = 0 \Rightarrow I_L = \boxed{8 \text{ mA}}$$</span>
+    </div>
+</div>
+
+</div><!-- end parallel grid -->
+
+<!-- ============================================
+     RANGKAIAN KOMPLEKS
+     ============================================ -->
+<div class="section-header" id="kompleks">RANGKAIAN KOMPLEKS (RLC &amp; Multi-Sumber)</div>
+
+<div class="circuit-grid">
+
+<!-- ==================== KOMPLEKS 1 ==================== -->
+<div class="circuit-card" id="k1">
+    <div class="circuit-title"><span class="num">K1.</span> Rangkaian Paralel RLC - 3 Sumber</div>
+    <div class="param-row">
+        <span>$V_s = 10V$</span>
+        <span>$R = 2k\Omega$</span>
+        <span>$C = 10\mu F$</span>
+        <span>$L = 5mH$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.7, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_s$, v=$10V$, color=red] (0,4);
+                \draw (2,4) to[R, l=$R$, v=$V_R$, color=green!70!black] (2,0);
+                \draw (4,4) to[C, l=$C$, v=$V_C$, color=orange] (4,0);
+                \draw (6,4) to[L, l=$L$, v=$V_L$, color=violet] (6,0);
+                \draw (0,4) to[short] (6,4);
+                \draw (0,0) to[short] (6,0) node[ground]{};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_R$};
+                \node[above, color=blue, font=\small] at (4,4.1) {$I_C$};
+                \node[above, color=blue, font=\small] at (6,4.1) {$I_L$};
+                \node[above, color=blue, font=\small] at (3,4.1) {$I_{total}$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (2,4) {};
+                \node[circ] at (4,4) {};
+                \node[circ] at (6,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (2,0) {};
+                \node[circ] at (4,0) {};
+                \node[circ] at (6,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> DC steady-state分析:</span>
+        <span class="eq-result">$$\text{Kapasitor } C \text{ = open circuit } (I_C = 0)$$</span>
+        <span class="eq-result">$$\text{Induktor } L \text{ = short circuit } (V_L = 0)$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Tegangan node (terhubung ke ground melalui $L$):</span>
+        <span class="eq-result">$$V_{node} = 0V$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus dari sumber:</span>
+        <span class="eq-result">$$I_R = \frac{V_s - V_{node}}{R} = \frac{10V}{2k\Omega} = \boxed{5 \text{ mA}}$$</span>
+        <span class="eq-result">$$I_C = 0 \text{ A}, \quad I_L = I_R = \boxed{5 \text{ mA}}$$</span>
+        <span class="eq-result">$$\therefore \quad I_{total} = I_R + I_C = 5\text{mA} + 0 = \boxed{5 \text{ mA}}$$</span>
+    </div>
+</div>
+
+<!-- ==================== KOMPLEKS 2 ==================== -->
+<div class="circuit-card" id="k2">
+    <div class="circuit-title"><span class="num">K2.</span> Rangkaian Paralel: 2 Sumber Tegangan + 2 Resistor</div>
+    <div class="param-row">
+        <span>$V_1 = 15V$, $R_1 = 2k\Omega$</span>
+        <span>$V_2 = 10V$, $R_2 = 3k\Omega$</span>
+    </div>
+    <div class="circuit-diagram">
+        <script type="text/tikz">
+            \begin{circuitikz}[american, scale=0.75, transform shape]
+                \ctikzset{bipole/length=0.8cm}
+                \draw (0,0) to[V, l=$V_1$, v=$15V$, color=red] (0,2)
+                      to[R, l=$R_1$, v=$V_{R_1}$, color=green!70!black] (0,4);
+                \draw (4,0) to[V, l=$V_2$, v=$10V$, color=red] (4,2)
+                      to[R, l=$R_2$, v=$V_{R_2}$, color=green!70!black] (4,4);
+                \draw (0,4) to[short] (4,4);
+                \draw (0,0) to[short] (4,0) node[ground]{};
+                \node[left, color=blue, font=\small] at (-0.1,3) {$I_1$};
+                \node[right, color=blue, font=\small] at (4.1,3) {$I_2$};
+                \node[above, color=blue, font=\small] at (2,4.1) {$I_{total}$};
+                \node[circ] at (0,4) {};
+                \node[circ] at (4,4) {};
+                \node[circ] at (0,0) {};
+                \node[circ] at (4,0) {};
+            \end{circuitikz}
+        </script>
+    </div>
+    <div class="equation-box">
+        <span class="eq-step"><span class="eq-number">(1)</span> Tegangan nodal (KCL di node atas):</span>
+        <span class="eq-result">$$\frac{V_n - V_1}{R_1} + \frac{V_n - V_2}{R_2} = 0$$</span>
+        <span class="eq-result">$$V_n = \frac{V_1 \cdot R_2 + V_2 \cdot R_1}{R_1 + R_2} = \frac{15 \times 3 + 10 \times 2}{2 + 3} = \frac{65}{5} = \boxed{13V}$$</span>
+        <span class="eq-step"><span class="eq-number">(2)</span> Arus masing-masing cabang:</span>
+        <span class="eq-result">$$I_1 = \frac{V_n - V_1}{R_1} = \frac{13 - 15}{2k\Omega} = \boxed{-1 \text{ mA}}$$</span>
+        <span class="eq-result">$$I_2 = \frac{V_n - V_2}{R_2} = \frac{13 - 10}{3k\Omega} = \boxed{1 \text{ mA}}$$</span>
+        <span class="eq-step"><span class="eq-number">(3)</span> Arus total:</span>
+        <span class="eq-result">$$I_{total} = I_1 + I_2 = -1\text{mA} + 1\text{mA} = \boxed{0 \text{ mA}}$$</span>
+    </div>
+</div>
+
+</div><!-- end complex grid -->
+
+</div><!-- end circuits-container -->
+
+</body>
+</html>
